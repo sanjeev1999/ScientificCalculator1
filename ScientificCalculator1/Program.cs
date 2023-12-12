@@ -17,8 +17,8 @@ namespace Scientific_Calculator1
         public static void Main(string[] args)
         {
             Console.SetCursorPosition(0, 10);
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("Key Mapping");            
+            Console.WriteLine("Key Mapping");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             KeyMapping();
             
 
@@ -39,6 +39,7 @@ namespace Scientific_Calculator1
             char inputChar;
             double currentNumber = 0;
             double result = 0;
+            bool restart = false;
             string memoryValue=string.Empty;
             // char op = '+';
             Console.Write(currentNumber);
@@ -136,6 +137,7 @@ namespace Scientific_Calculator1
 
                     if (IsOperatorKey(inputChar))
                     {
+                        restart = false;
                         if (currentNumber == 0)
                             calculate.Append(number).Append(inputChar);
                         else
@@ -182,6 +184,7 @@ namespace Scientific_Calculator1
                         if (number.Length == 0)
                         {
                             ClearCurrentConsoleLine();
+                           
                         }
 
                         if (number.Length > 0 && number[0] == '0')
@@ -189,7 +192,7 @@ namespace Scientific_Calculator1
                             number.Clear();
                             ClearCurrentConsoleLine();
                         }
-                        if (inputExpression.Length != 0 && inputExpression[inputExpression.Length - 1] == '=')
+                        if (restart)
                         {
 
                             ClearConsoleExceptFirstTwoLine();
@@ -197,6 +200,7 @@ namespace Scientific_Calculator1
                             inputExpression.Clear();
                             calculate.Clear();
                             currentNumber = 0;
+                            restart = false;
                             //  op = '+';
                         }
                         number.Append(inputChar);
@@ -221,12 +225,12 @@ namespace Scientific_Calculator1
                         Console.Write(inputExpression);
 
                         result = ArithmeticOperations.Bodmas(calculate.ToString(), staticVar2);
+                        restart = true;
                         calculate.Clear();
                         calculate.Append(result);
-                        number.Clear();
+                        number.Clear();                      
                         inputExpression.Clear();
                         inputExpression.Append(result);
-                       
                     }
 
                     else if (inputChar == 's' || inputChar == 'c' || inputChar == 't' || inputChar == 'L' || inputChar == 'O'
@@ -236,11 +240,11 @@ namespace Scientific_Calculator1
                         || inputChar == 'g' || inputChar == 'G' || inputChar == 'h' || inputChar == 'H' || inputChar == 'k' || inputChar == 'K' || inputChar == 'l'
                         || inputChar == 'm' || inputChar == 'n')
                     {
-                        if (inputExpression.Length != 0 && inputExpression[inputExpression.Length - 1] == '=')
+                        if (restart)
                         {
-                            number.Append(result);
+                            number.Append(result.ToString());
                             inputExpression.Clear();
-
+                            restart = false;
                         }
 
                         IsTrigonometricFunctionKey(inputChar);

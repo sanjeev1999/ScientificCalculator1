@@ -1,0 +1,6 @@
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\bin\Debug\Power.dll
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\bin\Debug\Power.pdb
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\obj\Debug\Power.csproj.AssemblyReference.cache
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\obj\Debug\Power.csproj.CoreCompileInputs.cache
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\obj\Debug\Power.dll
+C:\Users\singh sanjeev\Documents\Training\C#training\ScientificCalculator1\Power\obj\Debug\Power.pdb

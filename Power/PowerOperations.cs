@@ -1,8 +1,6 @@
 ﻿using System;
 
 
-
-
 namespace Power
 {
     public class PowerOperations
@@ -47,8 +45,8 @@ namespace Power
 
         public static double Cosine(double angle)
         {
-            double epsilon = 1e-10;
-            if (Math.Cos(angle) < epsilon)
+            double MinThreshold = 1e-10;
+            if (Math.Cos(angle) < MinThreshold)
             {
                 return 0;
             }
@@ -57,9 +55,10 @@ namespace Power
                 return Math.Cos(angle);
             }          
         }
-
+        
         public static double Tangent(double angle)
         {
+            
             return Math.Tan(angle);
         }
 

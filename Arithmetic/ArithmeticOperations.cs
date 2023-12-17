@@ -59,8 +59,6 @@ namespace Arithmetic
 
         }
 
-
-
         private static bool IsNumeric(char x)
         {
             if (x >= 48 && x <= 57)

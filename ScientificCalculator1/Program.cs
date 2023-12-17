@@ -1,7 +1,9 @@
 ﻿using Arithmetic;
 using Power;
 using System;
+using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace Scientific_Calculator1
 {
@@ -10,7 +12,7 @@ namespace Scientific_Calculator1
         static string staticVar1 = "degree";
         static string staticVar2 = "E-F";
         static string staticVar3 = "";
-
+        static string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
         public static void Main()
         {
             Console.SetCursorPosition(0, 10);
@@ -20,7 +22,6 @@ namespace Scientific_Calculator1
             KeyMapping();
 
 
-
             // Move the cursor to a specific position
             Console.SetCursorPosition(0, 0);
 
@@ -28,10 +29,11 @@ namespace Scientific_Calculator1
             Console.WriteLine("                                         ---welcome to Scientific World---");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"{staticVar1} | {staticVar2} | {staticVar3}");
-
+            
             StringBuilder inputExpression = new StringBuilder();
             StringBuilder number = new StringBuilder("0");
             StringBuilder calculate = new StringBuilder();
+
 
             ConsoleKeyInfo keyInfo;
             char inputChar;
@@ -46,6 +48,10 @@ namespace Scientific_Calculator1
             double number1 = 0;
             StringBuilder temp = new StringBuilder();
             char SpecialOperaterch=' ';
+            ProcessStartInfo psi = new ProcessStartInfo(executablePath)
+            {
+                UseShellExecute = false
+            };
 
             do
             {
@@ -209,21 +215,7 @@ namespace Scientific_Calculator1
                 }
                 else if (IsValidInputKey(keyInfo.KeyChar))
                 {
-                    /* if (extOp && (char.IsDigit(inputChar) || inputChar == '.') && !IsOperatorKey(inputChar))
-                     {
-                         number1 = result;
-                         if (temp.Length == 0)
-                         {
-                             ClearCurrentConsoleLine();
-                         }
-
-                         temp.Append(inputChar);
-
-                         Console.Write(inputChar);
-                         number2 = Convert.ToDouble(temp.ToString());
-                         //Calculation();
-                     }*/
-
+                    
                     if (IsOperatorKey(inputChar) || IsBracket(inputChar))
                     {
                         if (extOp && number.Length != 0)      // check
@@ -233,15 +225,22 @@ namespace Scientific_Calculator1
                             Console.Write($"\n{currentNumber}");
                             result = currentNumber;
 
-
                             restart = false;
                             if (currentNumber == 0)
+                            {
                                 calculate.Append(number).Append(inputChar);
+                            }
+
                             else
-                                calculate.Append(currentNumber).Append(inputChar);
+                            {                                
+                                    calculate.Append(currentNumber.ToString("F")).Append(inputChar);
+                                                              
+                            }
+                                
 
                             inputExpression.Append(temp.ToString());
                             extOp = false;
+                           
                             temp.Clear();
                             number1 = 0;
                             number2 = 0;
@@ -249,16 +248,19 @@ namespace Scientific_Calculator1
                         else
                         {
                             extOp = false;
+                           
                             restart = false;
                             if (currentNumber == 0)
+                            {
                                 calculate.Append(number).Append(inputChar);
-                            else
-                                calculate.Append(currentNumber).Append(inputChar);
+                            }
 
+                            else
+                            {                              
+                                    calculate.Append(currentNumber.ToString("F")).Append(inputChar);                               
+                            }                                
                             inputExpression.Append(number.ToString());
                         }
-
-
 
                         if (inputExpression.Length != 0 && inputExpression[inputExpression.Length - 1] == '=')
                         {
@@ -342,7 +344,7 @@ namespace Scientific_Calculator1
 
                         currentNumber = CallSpecialCalculation(SpecialOperaterch,number1,number2);
                         calculate.Append(currentNumber);
-                        if (calculate.Length >=1 && IsOperatorKey(calculate[calculate.Length-1]))       // 2+2=^2=416
+                        if (calculate.Length >=1 )       // 2+2=^2= 416    //      && IsOperatorKey(calculate[calculate.Length-1])
                         {
                            currentNumber = ArithmeticOperations.Evaluate(calculate.ToString(), staticVar2);
                         }
@@ -355,7 +357,7 @@ namespace Scientific_Calculator1
                         if (currentNumber == 0)
                             calculate.Append(number).Append(inputChar);
                         else
-                            calculate.Append(currentNumber).Append(inputChar);
+                            calculate.Append(currentNumber.ToString("F")).Append(inputChar);
 
                         inputExpression.Append(temp.ToString()).Append(inputChar);
 
@@ -369,6 +371,7 @@ namespace Scientific_Calculator1
                         number.Clear();
                         inputExpression.Clear();
                         inputExpression.Append(result);
+
                         extOp = false;
                         temp.Clear();
                         number1 = 0;
@@ -385,11 +388,19 @@ namespace Scientific_Calculator1
                         {
                             continue;
                         }
-
+                       
                         if (currentNumber == 0)
+                        {   
                             calculate.Append(number).Append(inputChar);
+                        }
+
                         else
-                            calculate.Append(currentNumber).Append(inputChar);
+                        {
+                            
+                            calculate.Append(currentNumber.ToString("F")).Append(inputChar);
+                            
+                        }
+                            
                         inputExpression.Append(number.ToString()).Append(inputChar);
                         ClearConsoleExceptFirstTwoLine();
 
@@ -397,9 +408,10 @@ namespace Scientific_Calculator1
                         Console.Write(inputExpression);
 
                         result = ArithmeticOperations.Evaluate(calculate.ToString(), staticVar2);
+                        currentNumber = result;
                         restart = true;
                         calculate.Clear();
-                        calculate.Append(result);
+                      //  calculate.Append(result);
                         number.Clear();
                         inputExpression.Clear();
                         inputExpression.Append(result);
@@ -445,6 +457,7 @@ namespace Scientific_Calculator1
             void IsTrigonometricFunctionKey(char c)
             {
                 StringBuilder s = inputExpression;
+                
 
                 switch (c)
                 {
@@ -453,12 +466,7 @@ namespace Scientific_Calculator1
                         number.Insert(0, "sin(").Append(")");
                         Console.Write(s.ToString() + number.ToString());
                         currentNumber = PowerOperations.Sine(CalculateTrigonometricValue(result, staticVar1));
-                        break;
-                    /* ClearConsoleExceptFirstTwoLine();
-                     inputExpression.Insert(0, "sine(" + number).Append(")");
-                     Console.Write(inputExpression);
-                     currentNumber = PowerOperations.Sine(CalculateTrigonometricValue(result, staticVar1));
-                     break;*/
+                        break;                  
 
                     case 'c':
                         ClearConsoleExceptFirstTwoLine();
@@ -478,7 +486,8 @@ namespace Scientific_Calculator1
                             ClearConsoleExceptFirstTwoLine();
                             number.Insert(0, "Sin^(-1)(").Append(")");
                             Console.WriteLine(s.ToString() + number.ToString());
-                            Console.Write("Invalid input");
+                            Invald();
+
 
                         }
                         else
@@ -738,8 +747,7 @@ namespace Scientific_Calculator1
 
                 }
                 Console.Write($"\n{currentNumber}");
-                //  Console.Write(inputExpression);
-                // number.Clear();
+
                 result = currentNumber;
                 //  number= currentNumber;
 
@@ -807,6 +815,25 @@ namespace Scientific_Calculator1
                         
                 }
                 return output;
+            }
+             void Invald()
+            {
+
+                Console.WriteLine("Invalid input   ");               
+                Thread.Sleep(1000);
+                Console.Write("Press Ctrl+Z  to restart        ///");
+                Process.Start(psi);
+                Environment.Exit(0);
+
+                extOp = false;
+                temp.Clear();
+                number1 = 0;      ////
+                number2 = 0;
+                inputExpression.Clear();
+                number.Clear();
+                calculate.Clear();
+                currentNumber = 0;
+                
             }
 
 
@@ -905,5 +932,7 @@ namespace Scientific_Calculator1
             Console.Write($"{c3}");
 
         }
+
+        
     }
 }

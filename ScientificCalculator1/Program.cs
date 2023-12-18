@@ -128,7 +128,6 @@ namespace Scientific_Calculator1
                     number2 = 0;
 
 
-
                     inputExpression.Clear();
                     number.Clear();
                     calculate.Clear();
@@ -174,7 +173,7 @@ namespace Scientific_Calculator1
                 {
                     staticVar3 = "MC";
                     ClearStatusLine(staticVar3);
-                    memoryValue = null;
+                    memoryValue = string.Empty;
 
                 }
                 else if (keyInfo.Key == ConsoleKey.B && keyInfo.Modifiers == ConsoleModifiers.Control)
@@ -257,7 +256,7 @@ namespace Scientific_Calculator1
 
                             else
                             {                              
-                                    calculate.Append(currentNumber.ToString("F")).Append(inputChar);                               
+                                calculate.Append(currentNumber.ToString("F")).Append(inputChar);                               
                             }                                
                             inputExpression.Append(number.ToString());
                         }
@@ -273,7 +272,7 @@ namespace Scientific_Calculator1
 
                             //  Console.Write(calculate);
                             Console.Write($"\n{currentNumber}");
-                            calculate.Append(currentNumber).Append(inputChar);
+                            calculate.Append(currentNumber.ToString("F")).Append(inputChar);
 
 
                         }
@@ -292,7 +291,6 @@ namespace Scientific_Calculator1
                             ClearConsoleExceptFirstTwoLine();
                             Console.WriteLine(inputExpression);
                             Console.Write(currentNumber);
-
 
                         }
                         number.Clear();
@@ -338,12 +336,10 @@ namespace Scientific_Calculator1
                         {
                             continue;
                         }
-
                         temp.Append(number);
 
-
                         currentNumber = CallSpecialCalculation(SpecialOperaterch,number1,number2);
-                        calculate.Append(currentNumber);
+                        calculate.Append(currentNumber.ToString("F"));
                         if (calculate.Length >=1 )       // 2+2=^2= 416    //      && IsOperatorKey(calculate[calculate.Length-1])
                         {
                            currentNumber = ArithmeticOperations.Evaluate(calculate.ToString(), staticVar2);
@@ -479,15 +475,19 @@ namespace Scientific_Calculator1
                         number.Insert(0, "tan(").Append(")");
                         Console.Write(s.ToString() + number.ToString());
                         currentNumber = PowerOperations.Tangent(CalculateTrigonometricValue(result, staticVar1));
-                        break;
+                        if(currentNumber>= 1.63317787283838E+16)
+                        {
+                            Invald();
+                        }
+
+                            break;
                     case 'S':
                         if (result < -1 || result > 1)
                         {
                             ClearConsoleExceptFirstTwoLine();
                             number.Insert(0, "Sin^(-1)(").Append(")");
-                            Console.WriteLine(s.ToString() + number.ToString());
+                            Console.Write(s.ToString() + number.ToString());
                             Invald();
-
 
                         }
                         else
@@ -505,7 +505,7 @@ namespace Scientific_Calculator1
                             ClearConsoleExceptFirstTwoLine();
                             Console.Write(s.ToString() + number.ToString());
                             number.Insert(0, "cos^(-1)(").Append(")");
-                            Console.Write("Invalid input");
+                            Invald();
                         }
                         else
                         {
@@ -533,7 +533,7 @@ namespace Scientific_Calculator1
                         {
                             ClearConsoleExceptFirstTwoLine();
                             number.Insert(0, "cosec^(-1)(").Append(")");
-                            Console.Write("Invalid input");
+                            Invald();
                         }
                         ClearConsoleExceptFirstTwoLine();
                         number.Insert(0, "Cosec^(-1)(").Append(")");
@@ -551,7 +551,7 @@ namespace Scientific_Calculator1
                         {
                             ClearConsoleExceptFirstTwoLine();
                             number.Insert(0, "sec^(-1)(").Append(")");
-                            Console.Write("Invalid input");
+                            Invald();
                         }
                         else
                         {
@@ -679,7 +679,14 @@ namespace Scientific_Calculator1
                         ClearConsoleExceptFirstTwoLine();
                         number.Insert(0, "fact(").Append(")");
                         Console.Write(s.ToString() + number.ToString());
-                        currentNumber = PowerOperations.Factorial(result);
+                        if (result < 0)
+                        {
+                            Invald();
+                        }
+                        else
+                        {
+                            currentNumber = PowerOperations.Factorial(result);
+                        }                     
                         break;
                     case 'i':
                         ClearConsoleExceptFirstTwoLine();
@@ -819,7 +826,7 @@ namespace Scientific_Calculator1
              void Invald()
             {
 
-                Console.WriteLine("Invalid input   ");               
+                Console.WriteLine($"\nInvalid input   ");               
                 Thread.Sleep(1000);
                 Console.Write("Press Ctrl+Z  to restart        ///");
                 Process.Start(psi);
